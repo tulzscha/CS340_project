@@ -36,7 +36,7 @@ app.get('/index', function(req, res){
 
 app.get('/encounters', function(req, res){
 
-    res.render('index')
+    res.render('encounters')
 
     });
     
