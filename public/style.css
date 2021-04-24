@@ -1,0 +1,22 @@
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+th {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table  {
+    border-collapse: collapse;
+}
+td, th {
+    border: 1px solid black; padding: 3px 8px;
+}
+th {
+    text-align: left;
+}
+
+fieldset {
+    line-height: 28px;
+    display: inline;
+}
