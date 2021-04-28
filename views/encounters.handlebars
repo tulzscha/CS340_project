@@ -3,17 +3,22 @@
 <div>
 <form>
     <fieldset>
-        <legend>Insert Encounter</legend>
-        <label for="parkID">Park ID:</label>
+        <legend>Create Encounter</legend>
+        <label for="parkID">Park ID (leave empty if encounter occurred ouside of a Park):</label>
         <input type="number" id="parkID" name="parkID">
-        <label for="encounterdate">Date:</label>
+        <br>
+        <label for="encounterdate">Date (required):</label>
         <input type="date" id="encounterdate" name="encounterdate">
-        <label for="baskets">Number of baskets stolen:</label>
-        <input type="number" min="0" id="baskets" name="baskets"><br>
+        <br>
+        <label for="baskets">Number of picnic baskets stolen:</label>
+        <input type="number" min="0" id="baskets" name="baskets">
+        <br>
         <label for="photos">Number of photos taken:</label>
         <input type="number" min="0" id="photos" name="photos">
-        <label for="description">Description:</label>
-        <input type="text" id="description" name="description"><br>
+        <br>
+        <label for="description">Description of incident:</label>
+        <input type="text" id="description" name="description">
+        <br>
         <input type="submit" id="submitbutton">
     </fieldset>
 </form>
@@ -21,33 +26,36 @@
 
 
 <br>
-<h2>View Encounters</h2>
+<h2>Encounters</h2>
 <table>
     <tr>
+        <th>encounterID</th>
         <th>Park</th>
         <th>Date</th>
         <th>Baskets Stolen</th>
         <th>Photos Taken</th>
         <th>Description</th>
-        <th>Bear</th>
-        <th>Human</th>
+        <th>Bears</th>
+        <th>Humans</th>
     </tr>
     <tr>
+        <td>1</td>
         <td>Redwood</td>
         <td>01-01-1999</td>
         <td>0</td>
         <td>100</td>
         <td>NULL</td>
-        <td>Jeff</td>
-        <td>John</td>
+        <td>Jeff, Megan</td>
+        <td>John Smith, Hap Less</td>
     </tr>
     <tr>
+        <td>2</td>
         <td>Grand Canyon</td>
         <td>05-19-2020</td>
         <td>1</td>
         <td>2</td>
         <td>NULL</td>
         <td>Megan</td>
-        <td>Acacia</td>
+        <td>Acacia Ford</td>
     </tr>
 </table>

@@ -3,22 +3,25 @@
 <div>
 <form>
     <fieldset>
-        <legend>Insert Human</legend>
-        <label for="encounterID">Encounter ID:</label>
+        <legend>Create Human (adds Human to Encounter)</legend>
+        <label for="encounterID">encounterID (required):</label>
         <input type="number" id="encounterID" name="encounterID">
+        <br>
         <label for="fname">First name:</label>
         <input type="text" id="fname" name="fname">
-        <label for="lname">last name:</label>
+        <label for="lname">Last name:</label>
         <input type="text" id="lname" name="lname">
+        <br>
         <label for="bday">Date of birth:</label>
-        <input type="date" id="bday" name="bday"><br>
+        <input type="date" id="bday" name="bday">
+        <br>
         <input type="submit" id="submitbutton">
     </fieldset>
 </form>
 </div>
 
 <br>
-<h2>View humans</h2> 
+<h2>Humans</h2> 
 <table>
     <tr>
         <th>Encounter ID</th>
@@ -31,6 +34,12 @@
         <td>John</td>
         <td>Smith</td>
         <td>01-12-1950</td>
+    </tr>
+        <tr>
+        <td>1</td>
+        <td>Hap</td>
+        <td>Less</td>
+        <td>01-23-1989</td>
     </tr>
     <tr>
         <td>2</td>

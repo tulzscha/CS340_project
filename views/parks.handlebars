@@ -3,10 +3,10 @@
 <div>
 <form>
     <fieldset>
-        <legend>Insert Park</legend>
-        <label for="pname">Park name:</label>
+        <legend>Create Park</legend>
+        <label for="pname">Park name (required):</label>
         <input type="text" id="pname" name="pname">
-        <label for="state">State:</label>
+        <label for="state">State (required, 2-letter Postal Code):</label>
         <input type="text" id="lname" name="lname" maxlength="2" minlength="2">
         <label for="annualvisitorcount">Annual Visitor Count:</label>
         <input type="number" id="annualvisitorcount" name="annualvisitorcount" minlength="0"><br>
@@ -15,20 +15,37 @@
 </form>
 </div>
 
+<div>
+<form>
+    <fieldset>
+        <legend>Remove Park from Encounter</legend>
+        <label for="parkID">Park ID:</label>
+        <input type="number" id="parkID" name="parkID">
+        <label for="encounterID">Encounter ID:</label>
+        <input type="number" id="encounterID" name="encounterID"><br>
+        <input type="submit" id="submitbutton">
+    </fieldset>
+</form>
+</div>
+
+
 <h2>View parks</h2>
 <table>
     <tr>
+        <th>parkID</th>
         <th>Park name</th>
         <th>State</th>
         <th>Annual Visitor Count</th>
     </tr>
     <tr>
+        <td>1</td>
         <td>Redwood</td>
         <td>CA</td>
         <td>504,722</td>
     </tr>
     <tr>
+        <td>2</td>
         <td>Grand Canyon</td>
         <td>AZ</td>
-        <td>509700000</td>
+        <td>509,700,000</td>
     </tr>

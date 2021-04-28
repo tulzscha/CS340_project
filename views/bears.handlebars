@@ -3,24 +3,17 @@
 <div>
 <form>
     <fieldset>
-        <legend>Insert Bear</legend>
-        <label for="bearname">Bear Name:</label>
+        <legend>Create New Bear Bio</legend>
+        <label for="bearname">Bear Name (required):</label>
         <input type="text" id="bearname" name="bearname">
-        <label for="species">Species:</label>
+        <br>
+        <label for="species">Bear Species:</label>
         <input type="text" id="species" name="species">
-        <label for="tattoos">Identifying tattoos:</label>
-        <input type="text" id="tattoos" name="tattoos"><br>
+        <br>
+        <label for="tattoos">Bear's Identifying Tattoos:</label>
+        <input type="text" id="tattoos" name="tattoos">
+        <br>
         <input type="submit" id="submitbutton">
-    </fieldset>
-</form>
-</div>
-<div>
-    <form>
-    <fieldset>
-        <legend>Search Bears</legend>
-        <label for="bearsearch">Search:</label>
-        <input type="search" id="bearsearch" name="bearsearch"><br>
-        <input type="submit" value="Search" id="submitbutton">
     </fieldset>
 </form>
 </div>
@@ -28,13 +21,17 @@
 <div>
     <form>
     <fieldset>
-        <legend>Update Bear</legend>
-        <label for="bearID">bearID:</label>
+        <legend>Update Bear Record</legend>
+        <p>Enter existing bearID, and data to be updated:</p>
+        <label for="bearID">bearID (required):</label>
         <input type="number" id="bearID" name="bearID">
+        <br>
         <label for="bearName">Name:</label>
         <input type="text" id="bearName" name="bearName">
+        <br>
         <label for="species">Species:</label>
         <input type="text" id="species" name="species">
+        <br>
         <label for="tattoos">Identifying tattoos:</label>
         <input type="text" id="tattoos" name="tattoos"><br>
         <input type="submit" id="submitbutton">
@@ -42,20 +39,36 @@
 </form>
 <br>
 </div>
-<h2>View bears</h2>
+
+<div>
+    <form>
+    <fieldset>
+        <legend>Search Bears:</legend>
+        <label for="bearsearch">Search Word:</label>
+        <input type="search" id="bearsearch" name="bearsearch">
+        <br>
+        <input type="submit" value="Search" id="submitbutton">
+    </fieldset>
+</form>
+</div>
+
+<h2>Bears</h2>
 <table>
     <tr>
+        <th>bearID</th>
         <th>Name</th>
         <th>Species</th>
         <th>Identifying Tattoos</th>
     </tr>
     <tr>
+        <td>1</td>
         <td>Megan</td>
         <td>Polar Bear</td>
-        <td>Four leaf clover on hand</td>
+        <td>Right hand: Four leaf clover.</td>
     </tr>
     <tr>
+        <td>2</td>
         <td>Jeff</td>
         <td>Koala Bear</td>
-        <td>NULL</td>
+        <td>Left Pectoral: Two bears High-Fiving. Right Knuckles: M A U L.</td>
     </tr>
