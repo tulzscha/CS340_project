@@ -4,7 +4,7 @@
 // Express
 var express = require('express');   // We are using the express library for the web server
 var app     = express();            // We need to instantiate an express object to interact with the server in our code
-var PORT    = 6515;
+var PORT    = 65155;
 
 
 // Database
@@ -61,7 +61,11 @@ app.get('/parks', function(req, res){
 
     });
                         
+app.get('/bear_encounters', function(req, res){
 
+    res.render('bear_encounters')
+    
+    });
 
 /*
     ERRERS
