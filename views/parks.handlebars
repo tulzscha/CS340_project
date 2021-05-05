@@ -1,11 +1,11 @@
-<div id="navbar2">
+<div class="navbar2">
     <nav>
         <ul>
             <li id="li2"><a href="/index" id="Home">Home</a></li>
-            <li id="li2"><a href="/bears" id="Bears">Bears</a></li>
             <li id="li2"><a href="/encounters" id="Encounters">Encounters</a></li>
+            <li id="li2"><a href="/bears" id="Bears">Bears</a></li>
             <li id="li2"><a href="/humans" id="Humans">Humans</a></li>
-            <li id="li2"><a href="/parks" id="Parks">Parks</a></li> 
+            <li id="li2"><a href="/parks" id="Parks"><b>Parks</b></a></li> 
         </ul>
     </nav>
 </div>
@@ -20,7 +20,7 @@
         <input type="text" id="lname" name="lname" maxlength="2" minlength="2">
         <label for="annualvisitorcount">Annual Visitor Count:</label>
         <input type="number" id="annualvisitorcount" name="annualvisitorcount" minlength="0"><br>
-        <input type="submit" id="submitbutton">
+        <input type="submit" value="Create Park" id="submitbutton">
     </fieldset>
 </form>
 </div>
@@ -29,18 +29,13 @@
 <form>
     <fieldset>
         <legend>Remove Park from Encounter</legend>
-        <label for="parkID">Park name:</label>
-        <select id="parks" name="parks">
-            <option value="">Choose a Park</option>
-            <option value="parkID_1">Redwood</option>
-            <option value="parkID_2">Grandcanyon</option>
-        </select>
         <label for="encounterID">Encounter ID:</label>
         <select id="encounters" name="encounters">
             <option value="">Choose an encounter</option>
             <option value="eID_1">1</option>
             <option value="eID_2">2</option>
         </select>
+        <input type="submit" value="Remove Park" id="removeparkbutton">
     </fieldset>
 </form>
 </div>
@@ -61,6 +56,8 @@
             <option value="eID_1">1</option>
             <option value="eID_2">2</option>
         </select>
+        <input type="submit" value="Add Park" id="addparkbutton">
+
     </fieldset>
 </form>
 </div>

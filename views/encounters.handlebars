@@ -1,9 +1,9 @@
-<div id="navbar2">
+<div class="navbar2">
     <nav>
         <ul>
             <li id="li2"><a href="/index" id="Home">Home</a></li>
+            <li id="li2"><a href="/encounters" id="Encounters"><b>Encounters</b></a></li>
             <li id="li2"><a href="/bears" id="Bears">Bears</a></li>
-            <li id="li2"><a href="/encounters" id="Encounters">Encounters</a></li>
             <li id="li2"><a href="/humans" id="Humans">Humans</a></li>
             <li id="li2"><a href="/parks" id="Parks">Parks</a></li> 
         </ul>
@@ -14,12 +14,12 @@
 <form>
     <fieldset>
         <legend>Create Encounter</legend>
-        <label for="parkID">Park name (click "N/A" if encounter occurred ouside of a Park):</label>
+        <label for="parkID">Park name (choose "NULL" if encounter occurred ouside of a Park):</label>
         <select id="parks" name="parks">
             <option value="">Choose a park</option>
             <option value="parkID_1">Redwood</option>
             <option value="parkID_2">Grand Canyon</option>
-            <option value="noPark">N/A</option>
+            <option value="noPark">NULL</option>
         </select>
         <br>
         <label for="encounterdate">Date (required):</label>
@@ -34,7 +34,7 @@
         <label for="description">Description of incident:</label>
         <input type="text" id="description" name="description">
         <br>
-        <input type="submit" id="submitbutton">
+        <input type="submit" value="Create Encounter" id="submitbutton">
     </fieldset>
 </form>
 </div>
@@ -63,7 +63,7 @@
             <option value="eID_2">2</option>
         </select>
         <br>
-        <input type="submit" id="submitbutton">
+        <input type="submit" value="Add Bear to Encounter" id="submitbutton">
     </fieldset>
 </form>
 </div>
@@ -87,7 +87,7 @@
             <option value="eID_2">2</option>
         </select>
         <br>
-        <input type="submit" id="submitbutton">
+        <input type="submit" value="Remove Bear from Encounter" id="submitbutton">
     </fieldset>
 </form>
 </div>
