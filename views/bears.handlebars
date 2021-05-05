@@ -1,4 +1,14 @@
-<p><a href="/index" id="home">Home</a></p>
+<div id="navbar2">
+    <nav>
+        <ul>
+            <li id="li2"><a href="/index" id="Home">Home</a></li>
+            <li id="li2"><a href="/bears" id="Bears">Bears</a></li>
+            <li id="li2"><a href="/encounters" id="Encounters">Encounters</a></li>
+            <li id="li2"><a href="/humans" id="Humans">Humans</a></li>
+            <li id="li2"><a href="/parks" id="Parks">Parks</a></li> 
+        </ul>
+    </nav>
+</div>
 <h1>Manage Bears</h1>
 <div>
 <form>
@@ -22,12 +32,13 @@
     <form>
     <fieldset>
         <legend>Update Bear Record</legend>
-        <p>Enter existing bearID, and data to be updated:</p>
-        <label for="bearID">bearID (required):</label>
-        <input type="number" id="bearID" name="bearID">
-        <br>
+        <p>Enter existing bear, and data to be updated:</p>
         <label for="bearName">Name:</label>
-        <input type="text" id="bearName" name="bearName">
+        <select id="bears" name="bears">
+            <option value="">Choose a bear</option>
+            <option value="bearID_1">Megan</option>
+            <option value="bearID_2">Jeff</option>
+        </select>
         <br>
         <label for="species">Species:</label>
         <input type="text" id="species" name="species">
