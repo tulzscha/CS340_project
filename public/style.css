@@ -8,7 +8,8 @@ body {
 }
 
 #li2 {
-    text-align: left;
+    margin-right: 2px;
+    text-align: center;
     display: inline;
     font-size: xx-small
 }
@@ -80,7 +81,9 @@ fieldset {
     line-height: 28px;
     display: inline;
 }
-#submitbutton {
+
+
+input[type="submit"] {
     margin-left: auto;
     margin-right: auto;
     border-radius: 20px
