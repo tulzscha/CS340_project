@@ -17,10 +17,10 @@
         <label for="pname">Park name (required):</label>
         <input type="text" id="pname" name="pname">
         <label for="state">State (required, 2-letter Postal Code):</label>
-        <input type="text" id="lname" name="lname" maxlength="2" minlength="2">
+        <input type="text" id="sname" name="sname" maxlength="2" minlength="2">
         <label for="annualvisitorcount">Annual Visitor Count:</label>
         <input type="number" id="annualvisitorcount" name="annualvisitorcount" minlength="0"><br>
-        <input type="submit" value="Create Park" id="submitbutton">
+        <input type="submit" value="Create Park" id="createParkButton">
     </fieldset>
 </form>
 </div>
@@ -30,7 +30,7 @@
     <fieldset>
         <legend>Remove Park from Encounter</legend>
         <label for="encounterID">Encounter ID:</label>
-        <select id="encounters" name="encounters">
+        <select id="encounterID" name="encounters">
             <option value="">Choose an encounter</option>
             <option value="eID_1">1</option>
             <option value="eID_2">2</option>
@@ -45,13 +45,13 @@
     <fieldset>
         <legend>Add Park to Encounter</legend>
         <label for="parkID">Park name:</label>
-        <select id="parks" name="parks">
+        <select id="parkname" name="parks">
             <option value="">Choose a Park</option>
             <option value="parkID_1">Redwood</option>
             <option value="parkID_2">Grandcanyon</option>
         </select>
         <label for="encounterID">Encounter ID:</label>
-        <select id="encounters" name="encounters">
+        <select id="updateEncounterID" name="encounters">
             <option value="">Choose an encounter</option>
             <option value="eID_1">1</option>
             <option value="eID_2">2</option>
