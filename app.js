@@ -79,14 +79,13 @@ app.get('/bears', function(req, res){
             bear_page_data.bears.push(bear);
         }
 
-        });
+        // Load data into the context
+        bear_context.data = bear_page_data;
 
-    // Load data into the context
-    bear_context.data = bear_page_data;
+        //render unto THE BEAR
+        res.render('bears', bear_context);
 
-    //render unto THE BEAR
-    res.render('bears', bear_context);
-
+    });
 });
 
 // Add Bear POST route
@@ -99,13 +98,81 @@ app.post('/addbear', function(req,res,next){
 
     db.pool.query(createBear, [bearname, species, tattoos], function(err, result){
         
-    if(err){
-        next(err);
-        return;
-    }
+        if(err){
+            next(err);
+            return;
+        }
+        });
+
+        res.redirect(302, 'back');
+
+});
+
+
+// Search Bear POST route
+app.post('/bearsearch', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var term = req.body.bearsearch
+
+    var searchBear = "SELECT bearID, bearName, species, identifyingTattoos FROM Bears WHERE bearName LIKE '%" + term + "%' OR species LIKE '%" + term + "%' OR identifyingTattoos LIKE '%" + term + "%'";
+    var search_context = {};
+    var search_page_data = {};
+
+    console.log(searchBear);
+
+    db.pool.query(searchBear, function(err, rows){
+        
+        if(err){
+            next(err);
+            return;
+        }
+
+        // populate page_data with Bears, where each bear is the data from the "rows" result of the query
+        search_page_data.bears = [];
+        for (row in rows) {
+            bear = {};
+
+            bear.bearID = rows[row].bearID;
+            bear.bearName = rows[row].bearName;
+            bear.species = rows[row].species;
+            bear.identifyingTattoos = rows[row].identifyingTattoos;
+
+            search_page_data.bears.push(bear);
+        }
+
+        // Load data into the context
+        search_context.data = search_page_data;
+
+        //render unto keysar
+        res.render('search_results', search_context);
+
     });
 
-    res.redirect('back');
+});
+
+// UPDATE Bear POST route
+app.post('/updatebear', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var bearID = req.body.bearID;
+    var species = req.body.species;
+    var tattoos = req.body.identifyingTattoos;
+
+    var updateBear = "UPDATE Bears SET species = '" + species + "', identifyingTattoos = '" + tattoos + "' WHERE bearID = " + bearID;
+
+    console.log(updateBear);
+
+    db.pool.query(updateBear, function(err, result){
+        if(err){
+            next(err);
+            return;
+        }
+    });
+
+    res.redirect(302, 'back');
 
 });
 
@@ -191,7 +258,7 @@ app.post('/addhumans', function(req,res,next){
     }
     });
 
-    res.redirect('back');
+    res.redirect(302, 'back');
 
 });
 
@@ -275,6 +342,11 @@ app.get('/parks', function(req, res){
     park_context.data = park_page_data;
     res.render('parks', park_context);
 
+    // setTimeout((() => {
+    //     park_context.data = park_page_data;
+    //     res.render('parks', park_context);
+    //  }), 1000);
+
 });
 
 // Add Park Humans POST route
@@ -293,7 +365,7 @@ app.post('/addpark', function(req,res,next){
     }
     });
 
-    res.redirect('back');
+    res.redirect(302, 'back');
 
 });
 

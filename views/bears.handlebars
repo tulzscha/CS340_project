@@ -29,12 +29,12 @@
 </div>
 
 <div>
-    <form>
+    <form id="updateBear" action="/updatebear" method="post">
     <fieldset>
         <legend>Update Bear Record</legend>
         <p>Enter existing bear, and data to be updated:</p>
         <label for="bearName">Name:</label>
-        <select id="bearNameSelection" name="bears">
+        <select id="bearID" name="bearID">
             <option value="">Choose a Bear</option>
             {{#each data.bears}}
             <option value={{this.bearID}}>{{this.bearName}}</option>
@@ -42,10 +42,11 @@
         </select>
         <br>
         <label for="species">Species:</label>
-        <input type="text" id="speciesUpdate" name="species">
+        <input type="text" id="species" name="species">
         <br>
-        <label for="tattoos">Identifying tattoos:</label>
-        <input type="text" id="tattooUpdate" name="tattoos"><br>
+        <label for="identifyingTattoos">Identifying tattoos:</label>
+        <input type="text" id="identifyingTattoos" name="identifyingTattoos">
+        <br>
         <input type="submit" value="Update Bear" id="updatebutton">
     </fieldset>
 </form>
@@ -53,7 +54,7 @@
 </div>
 
 <div>
-    <form>
+    <form id="searchBear" action="/bearsearch" method="post">
     <fieldset>
         <legend>Search Bears:</legend>
         <label for="bearsearch">Search Word:</label>
