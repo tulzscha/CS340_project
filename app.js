@@ -10,6 +10,7 @@ var PORT    = 65157;
 // Database
 var db = require('./db-connector')
 
+
 // Handlebars
 var handlebars = require('express-handlebars').create({defaultLayout:'main'});
 
@@ -48,19 +49,194 @@ app.get('/bears', function(req, res){
     });
 
 
+// HUMANS PAGE ROUTES
+// get route, display page with data
 app.get('/humans', function(req, res){
 
-    res.render('humans')
+    var selectHumans = "SELECT encounterID, firstName, lastName, date_format(birthday,'%Y-%m-%d') AS birthday FROM Humans";
+    var encounterIDs = "SELECT encounterID FROM Encounters"
+    var context = {};
+    var page_data = {};
 
+    // Query to get the current humans
+    db.pool.query(selectHumans, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+
+        // populate page_data with Humans, where each human is the data from the "rows" result of the query
+        page_data.humans = [];
+        for (row in rows) {
+            human = {};
+
+            human.encounterID      = rows[row].encounterID;
+            human.firstName    = rows[row].firstName;
+            human.lastName    = rows[row].lastName;
+            human.birthday  = rows[row].birthday;
+
+            page_data.humans.push(human);
+        }
+
+        });
+
+    // Query to get the available encoutnerIDs
+    db.pool.query(encounterIDs, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+
+        // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
+        page_data.encounters = [];
+
+        for (row in rows) {
+            encounter = {};
+            encounter.encounterID      = rows[row].encounterID;
+            page_data.encounters.push(encounter);
+        }
+
+        });
+
+    // Load data into the context
+    context.data = page_data;
+
+    //render unto keysar
+    res.render('humans', context);
+
+});
+
+// Humans POST route
+app.post('/addhumans', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var createHuman = "INSERT INTO Humans (`encounterID`, `firstName`, `lastName`, `birthday`) VALUES (?, ?, ?, ?)";
+    var {encounterID, fname, lname, bday} = req.body
+
+    db.pool.query(createHuman, [encounterID, fname, lname, bday], function(err, result){
+        
+    if(err){
+        next(err);
+        return;
+    }
     });
 
+    res.redirect('back');
 
+});
+
+
+
+
+// PARKS ROUTES
+    
 app.get('/parks', function(req, res){
 
-    res.render('parks')
+    var selectParks = "SELECT ParkID, parkName, state, annualVisitorCount FROM Parks";
+    var encounterIDs = "SELECT encounterID FROM Encounters";
+    var parkNames = "SELECT parkName FROM Parks";
+    var context = {};
+    var page_data = {};
+
+    // Query to get the current humans
+    db.pool.query(selectParks, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+
+        // populate page_data with Humans, where each human is the data from the "rows" result of the query
+        page_data.parks = [];
+
+        for (row in rows) {
+            park = {};
+
+            park.parkID      = rows[row].ParkID;
+            park.parkName    = rows[row].parkName;
+            park.state    = rows[row].state;
+            park.annualVisitorCount  = rows[row].annualVisitorCount;
+
+            page_data.parks.push(park);
+        }
 
     });
-                        
+
+
+    // Query to get the available encoutnerIDs
+    db.pool.query(encounterIDs, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+        
+        // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
+        page_data.encounters = [];
+        for (row in rows) {
+            encounter = {};
+            encounter.encounterID      = rows[row].encounterID;
+            page_data.encounters.push(encounter);
+        }
+
+    });
+
+
+    // Query to get the available park names
+    db.pool.query(parkNames, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+        
+        // populate data with parknames
+        page_data.parknames = [];
+
+        for (row in rows) {
+            parkname = {};
+            parkname.parkID      = rows[row].parkID;
+            parkname.parkName      = rows[row].parkName;
+            page_data.parknames.push(parkname);
+        }
+
+    });
+
+
+    context.data = page_data;
+    res.render('parks', context);
+
+});
+
+// Add Park Humans POST route
+app.post('/addpark', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var createPark = "INSERT INTO Parks (`parkName`, `state`, `annualVisitorCount`) VALUES (?, ?, ?)";
+    var {pname, sname, annualVisitorCount} = req.body
+
+    db.pool.query(createPark, [pname, sname, annualVisitorCount], function(err, result){
+        
+    if(err){
+        next(err);
+        return;
+    }
+    });
+
+    res.redirect('back');
+
+});
+
+
+
+
+
+
+
 app.get('/bear_encounters', function(req, res){
 
     res.render('bear_encounters')

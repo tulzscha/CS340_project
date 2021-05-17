@@ -11,14 +11,15 @@
 </div>
 <h1>Manage Humans</h1>
 <div>
-<form>
+<form id="addHuman" action="/addhumans" method="post">
     <fieldset>
         <legend>Create Human (adds Human to Encounter)</legend>
         <label for="encounterID">encounterID (required):</label>
-        <select id="encounterID" name="encounters">
-            <option value="">Choose an encounter</option>
-            <option value="bearID_1">1</option>
-            <option value="bearID_2">2</option>
+        <select id="encounterID" name="encounterID">
+            <option value="">Choose an Encounter</option>
+            {{#each data.encounters}}
+            <option value={{this.encounterID}}>{{this.encounterID}}</option>
+            {{/each}}
         </select>
         <br>
         <label for="fname">First name:</label>
@@ -43,21 +44,12 @@
         <th>Last Name</th>
         <th>Birthday</th>
     </tr>
+    {{#each data.humans}}
     <tr>
-        <td>1</td>
-        <td>John</td>
-        <td>Smith</td>
-        <td>01-12-1950</td>
+        <td>{{this.encounterID}}</td>
+        <td>{{this.firstName}}</td>
+        <td>{{this.lastName}}</td>
+        <td>{{this.birthday}}</td>
     </tr>
-        <tr>
-        <td>1</td>
-        <td>Hap</td>
-        <td>Less</td>
-        <td>01-23-1989</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>Acacia</td>
-        <td>Ford</td>
-        <td>9-10-2000</td>
-    </tr>
+    {{/each}}
+</table>

@@ -11,15 +11,15 @@
 </div>
 <h1>Manage Parks</h1>
 <div>
-<form>
+<form id="addPark" action="/addpark" method="post">
     <fieldset>
         <legend>Create Park</legend>
         <label for="pname">Park name (required):</label>
         <input type="text" id="pname" name="pname">
         <label for="state">State (required, 2-letter Postal Code):</label>
         <input type="text" id="sname" name="sname" maxlength="2" minlength="2">
-        <label for="annualvisitorcount">Annual Visitor Count:</label>
-        <input type="number" id="annualvisitorcount" name="annualvisitorcount" minlength="0"><br>
+        <label for="annualVisitorCount">Annual Visitor Count:</label>
+        <input type="number" id="annualVisitorCount" name="annualVisitorCount" minlength="0"><br>
         <input type="submit" value="Create Park" id="createParkButton">
     </fieldset>
 </form>
@@ -32,8 +32,9 @@
         <label for="encounterID">Encounter ID:</label>
         <select id="encounterID" name="encounters">
             <option value="">Choose an encounter</option>
-            <option value="eID_1">1</option>
-            <option value="eID_2">2</option>
+            {{#each data.encounters}}
+            <option value={{this.encounterID}}>{{this.encounterID}}</option>
+            {{/each}}
         </select>
         <input type="submit" value="Remove Park" id="removeParkButton">
     </fieldset>
@@ -47,14 +48,16 @@
         <label for="parkID">Park name:</label>
         <select id="parkname" name="parks">
             <option value="">Choose a Park</option>
-            <option value="parkID_1">Redwood</option>
-            <option value="parkID_2">Grandcanyon</option>
+            {{#each data.parknames}}
+            <option value={{this.parkID}}>{{this.parkName}}</option>
+            {{/each}}
         </select>
         <label for="encounterID">Encounter ID:</label>
         <select id="updateEncounterID" name="encounters">
-            <option value="">Choose an encounter</option>
-            <option value="eID_1">1</option>
-            <option value="eID_2">2</option>
+            <option value="">Choose an Encounter</option>
+            {{#each data.encounters}}
+            <option value={{this.encounterID}}>{{this.encounterID}}</option>
+            {{/each}}
         </select>
         <input type="submit" value="Add Park" id="addParkButton">
 
@@ -71,15 +74,12 @@
         <th>State</th>
         <th>Annual Visitor Count</th>
     </tr>
+    {{#each data.parks}}
     <tr>
-        <td>1</td>
-        <td>Redwood</td>
-        <td>CA</td>
-        <td>504,722</td>
+        <td>{{this.parkID}}</td>
+        <td>{{this.parkName}}</td>
+        <td>{{this.state}}</td>
+        <td>{{this.annualVisitorCount}}</td>
     </tr>
-    <tr>
-        <td>2</td>
-        <td>Grand Canyon</td>
-        <td>AZ</td>
-        <td>509,700,000</td>
-    </tr>
+    {{/each}}
+</table>
