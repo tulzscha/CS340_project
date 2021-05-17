@@ -1,0 +1,38 @@
+<div class="navbar2">
+    <nav>
+        <ul>
+            <li id="li2"><a href="/index" id="Home">Home</a></li>
+            <li id="li2"><a href="/encounters" id="Encounters">Encounters</a></li>
+            <li id="li2"><a href="/bears" id="Bears"><b>Bears</b></a></li>
+            <li id="li2"><a href="/humans" id="Humans">Humans</a></li>
+            <li id="li2"><a href="/parks" id="Parks">Parks</a></li> 
+        </ul>
+    </nav>
+</div>
+<h1>Search Results</h1>
+{{#if data.bears}}
+<table>
+    <tr>
+        <th>bearID</th>
+        <th>Name</th>
+        <th>Species</th>
+        <th>Identifying Tattoos</th>
+    </tr>
+    {{#each data.bears}}
+    <tr>
+        <td>{{this.bearID}}</td>
+        <td>{{this.bearName}}</td>
+        <td>{{this.species}}</td>
+        <td>{{this.identifyingTattoos}}</td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<h2>Nothing Found!</h2>
+{{/if}}
+
+<h2>
+      <form action="/bears">
+         <button type="submit">Back ot Bears page</button>
+      </form>
+</h2>

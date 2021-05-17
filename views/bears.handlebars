@@ -11,7 +11,7 @@
 </div>
 <h1>Manage Bears</h1>
 <div>
-<form>
+<form id="addBear" action="/addbear" method="post">
     <fieldset>
         <legend>Create New Bear Bio</legend>
         <label for="bearname">Bear Name (required):</label>
@@ -35,9 +35,10 @@
         <p>Enter existing bear, and data to be updated:</p>
         <label for="bearName">Name:</label>
         <select id="bearNameSelection" name="bears">
-            <option value="">Choose a bear</option>
-            <option value="bearID_1">Megan</option>
-            <option value="bearID_2">Jeff</option>
+            <option value="">Choose a Bear</option>
+            {{#each data.bears}}
+            <option value={{this.bearID}}>{{this.bearName}}</option>
+            {{/each}}
         </select>
         <br>
         <label for="species">Species:</label>
@@ -71,15 +72,12 @@
         <th>Species</th>
         <th>Identifying Tattoos</th>
     </tr>
+    {{#each data.bears}}
     <tr>
-        <td>1</td>
-        <td>Megan</td>
-        <td>Polar Bear</td>
-        <td>Right hand: Four leaf clover.</td>
+        <td>{{this.bearID}}</td>
+        <td>{{this.bearName}}</td>
+        <td>{{this.species}}</td>
+        <td>{{this.identifyingTattoos}}</td>
     </tr>
-    <tr>
-        <td>2</td>
-        <td>Jeff</td>
-        <td>Koala Bear</td>
-        <td>Left Pectoral: Two bears High-Fiving. Right Knuckles: M A U L.</td>
-    </tr>
+    {{/each}}
+</table>
