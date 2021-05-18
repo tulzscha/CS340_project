@@ -11,15 +11,15 @@
 </div>
 <h1>Manage Encounters</h1>
 <div>
-<form>
+<form id="addEncounter" action="/addencounter" method="post">
     <fieldset>
         <legend>Create Encounter</legend>
-        <label for="parkID">Park name (choose "NULL" if encounter occurred ouside of a Park):</label>
-        <select id="parkName" name="parks">
+        <label for="parkName">Park name (choose "NULL" if encounter occured outside of a Park):</label>
+        <select id="parkID" name="parkID">
             <option value="">Choose a park</option>
-            <option value="parkID_1">Redwood</option>
-            <option value="parkID_2">Grand Canyon</option>
-            <option value="noPark">NULL</option>
+            {{#each data.parks}}
+            <option value={{this.parkName}}>{{this.parkName}}</option>
+            {{/each}}
         </select>
         <br>
         <label for="encounterdate">Date (required):</label>
@@ -95,7 +95,7 @@
 <h2>Encounters</h2>
 <table>
     <tr>
-        <th>encounterID</th>
+        <th>Encounter ID</th>
         <th>Park</th>
         <th>Date</th>
         <th>Baskets Stolen</th>
@@ -104,24 +104,16 @@
         <th>Bears</th>
         <th>Humans</th>
     </tr>
+    {{#each data.encounters}}
     <tr>
-        <td>1</td>
-        <td>Redwood</td>
-        <td>01-01-1999</td>
-        <td>0</td>
-        <td>100</td>
-        <td>NULL</td>
-        <td>Jeff, Megan</td>
-        <td>John Smith, Hap Less</td>
+        <td>{{this.enID}}</td>
+        <td>{{this.Park}}</td>
+        <td>{{this.Date}}</td>
+        <td>{{this.BasketsStolen}}</td>
+        <td>{{this.PhotosTaken}}</td>
+        <td>{{this.Description}}</td>
+        <td>{{this.Bears}}</td>
+        <td>{{this.Humans}}</td>
     </tr>
-    <tr>
-        <td>2</td>
-        <td>Grand Canyon</td>
-        <td>05-19-2020</td>
-        <td>1</td>
-        <td>2</td>
-        <td>NULL</td>
-        <td>Megan</td>
-        <td>Acacia Ford</td>
-    </tr>
+    {{/each}}
 </table>

@@ -39,12 +39,131 @@ app.get('/index', function(req, res){
 // ENCOUNTERS ROUTES
 // ====================================================================================
 
-app.get('/encounters', function(req, res){
+app.get('/encounters', function(req, res, next){
 
-    res.render('encounters')
+    var selectEncounters2 = "SELECT en.encounterID AS enID, (SELECT parkName FROM Parks WHERE parkID = en.parkID) AS Park, date_format(en.encounterDate, '%Y-%m-%d') AS Date, en.basketsStolen AS BasketsStolen, en.photosTaken AS PhotosTaken, en.description AS Description, GROUP_CONCAT(DISTINCT be.bearName SEPARATOR ', ') AS Bears, GROUP_CONCAT(DISTINCT CONCAT(hu.firstName, ' ', hu.lastName) SEPARATOR ', ') AS Humans FROM Encounters en JOIN Encounters_Bears enbe ON en.encounterID = enbe.encounterID JOIN Bears be ON enbe.bearID = be.bearID JOIN Humans hu ON hu.encounterID = en.encounterID GROUP BY enID";
+    var selectParks = "SELECT * FROM Parks";
+    var encounter_context = {};
+    var encounter_page_data = {};
 
-    });
+    // 
+    db.pool.query(selectEncounters2, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
+        encounter_page_data.encounters = [];
+        for (row in rows) {
+            encounter = {};
+
+            encounter.enID      = rows[row].enID;
+            encounter.Park    = rows[row].Park;
+            encounter.Date    = rows[row].Date;
+            encounter.BasketsStolen  = rows[row].BasketsStolen;
+            encounter.PhotosTaken = rows[row].PhotosTaken;
+            encounter.Description = rows[row].Description;
+            encounter.Bears = rows[row].Bears;
+            encounter.Humans = rows[row].Humans;
+
+            encounter_page_data.encounters.push(encounter);
+
+        }
+    db.pool.query(selectParks, function(err, rows){
+
+        if(err){
+            next(err);
+            return;
+        }
     
+        encounter_page_data.parks = [];
+    
+        for (row in rows) {
+            park = {};
+            park.parkName      = rows[row].parkName;
+            encounter_page_data.parks.push(park);
+        }
+    
+    });
+
+    // Load data into the context
+    encounter_context.data = encounter_page_data;
+
+    //render unto keysar
+    res.render('encounters', encounter_context);
+    });
+
+});
+
+    
+// Add encounters POST route to create new encounter
+app.post('/addencounter', function(req,res,next){
+    
+    console.log("This is the body," + req.body)
+    var findParkId = "SELECT parkID FROM Parks WHERE parkName = '" + req.body.parkID + "'";
+    var createEncounter = "INSERT INTO Encounters (`parkID`, `encounterDate`, `basketsStolen`, `photosTaken`, `description` ) VALUES (?, ?, ?, ?, ?)";
+    var encounterdate = req.body.encounterdate;
+    var baskets = req.body.baskets;
+    var photos = req.body.photos;
+    var description = req.body.description;
+    var park = {};
+
+    function printvars(var1, var2, var3, var4, var5){
+        return new Promise(function(resolve, reject){
+            resolve(console.log("This is the id found in query outside query call, " + var5));
+            resolve(console.log("These are all the variables, " + var1, var2, var3, var4, var5));
+        });
+    }
+
+    function createquery(createEncounter, var1, var2, var3, var4, var5){
+        return new Promise(function(resolve, reject) {
+            db.pool.query(createEncounter, [var1, var2, var3, var4, var5], function(err, result){
+                if(err){
+                    next(err);
+                }   
+                resolve(console.log("ok"));
+            });
+        });
+    }
+
+    function waitquery(findParkId){
+        return new Promise(function(resolve, reject) {
+            db.pool.query(findParkId, function(err, rows){
+                park.data = [];
+        
+                if(err){
+                    next(err);
+                }
+                for (row in rows) {
+                    park.data.push(rows[row].parkID);
+                }
+                resolve(console.log("This is the id found in query, " + park.data));
+        
+        
+            });
+        })
+    }
+
+    // finds the park id associated with given park name
+    function doquery(){
+        return waitquery(findParkId);
+    }
+
+    // prints variables so we can check that they are correct (for testing purposes)
+    function doprintvars(){
+        return printvars(encounterdate, baskets, photos, description, park.data[0]);
+    }
+
+    function docreate(){
+        createquery(createEncounter, park.data[0], encounterdate, baskets, photos, description);
+    }
+
+    // first, find id that matches park name, then make sure those values are correct by printing to console, 
+    // finally, create the encounter. woo!
+    doquery().then(doprintvars).then(docreate);
+
+    res.redirect(302, 'back');
+});
 
 
 // ====================================================================================
