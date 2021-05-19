@@ -15,7 +15,7 @@
     <fieldset>
         <legend>Create Human (adds Human to Encounter)</legend>
         <label for="encounterID">encounterID (required):</label>
-        <select id="encounterID" name="encounterID">
+        <select id="encounterID" name="encounterID" required>
             <option value="">Choose an Encounter</option>
             {{#each data.encounters}}
             <option value={{this.encounterID}}>{{this.encounterID}}</option>

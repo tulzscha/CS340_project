@@ -9,21 +9,23 @@
         </ul>
     </nav>
 </div>
+
 <h1>Manage Encounters</h1>
 <div>
 <form id="addEncounter" action="/addencounter" method="post">
     <fieldset>
         <legend>Create Encounter</legend>
-        <label for="parkName">Park name (choose "NULL" if encounter occured outside of a Park):</label>
+        <label for="parkName">Park name (choose "Not in a Park" if encounter occured outside of a Park):</label>
         <select id="parkID" name="parkID">
             <option value="">Choose a park</option>
+            <option value="NULL">Not in a Park</option>
             {{#each data.parks}}
             <option value={{this.parkName}}>{{this.parkName}}</option>
             {{/each}}
         </select>
         <br>
         <label for="encounterdate">Date (required):</label>
-        <input type="date" id="encounterdate" name="encounterdate">
+        <input type="date" id="encounterdate" name="encounterdate" required>
         <br>
         <label for="baskets">Number of picnic baskets stolen:</label>
         <input type="number" min="0" id="baskets" name="baskets">
@@ -40,25 +42,20 @@
 </div>
 
 
-
-
-
 <h2>Add Bears to or remove Bears from Encounters</h2>
-
-
 <div>
-<form>
+<form id="addBearToEncounter" action="/addBearToEncounter" method="post">
     <fieldset>
         <legend>Add Bear to Encounter</legend>
         <label for="bearID">Bear name:</label>
-        <select id="bearID" name="bearID">
+        <select id="bearID" name="bearID" required>
             <option value="">Choose a bear</option>
             {{#each data.bears}}
-            <option value={{this.bearName}}>{{this.bearName}}</option>
+            <option value={{this.bearID}}>{{this.bearName}}</option>
             {{/each}}
         </select>
-        <label for="encounterID">encounterID (required):</label>
-        <select id="encounterID" name="encounterID">
+        <label for="encounterID">encounterID:</label>
+        <select id="encounterID" name="encounterID" required>
             <option value="">Choose an encounter</option>
             {{#each data.allencounters}}
             <option value={{this.encounterID}}>{{this.encounterID}}</option>
@@ -73,18 +70,18 @@
 <br>
 
 <div>
-<form>
+<form id="removeBearFromEncounter" action="/removeBearFromEncounter" method="post">
     <fieldset>
         <legend>Remove Bear from Encounter</legend>
         <label for="bearID">Bear name:</label>
-        <select id="bearID" name="bearID">
+        <select id="bearID" name="bearID" required>
             <option value="">Choose a bear</option>
             {{#each data.bears}}
-            <option value={{this.bearName}}>{{this.bearName}}</option>
+            <option value={{this.bearID}}>{{this.bearName}}</option>
             {{/each}}
         </select>
-        <label for="encounterID">encounterID (required):</label>
-        <select id="encounterID" name="encounterID">
+        <label for="encounterID">encounterID:</label>
+        <select id="encounterID" name="encounterID" required>
             <option value="">Choose an encounter</option>
             {{#each data.allencounters}}
             <option value={{this.encounterID}}>{{this.encounterID}}</option>
@@ -96,6 +93,7 @@
 </form>
 </div>
 <br>
+
 <h2>Encounters</h2>
 <table>
     <tr>
@@ -121,3 +119,4 @@
     </tr>
     {{/each}}
 </table>
+<div>(only complete encounters with Humans and Bears present are displayed)</div>

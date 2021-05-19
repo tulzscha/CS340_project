@@ -99,6 +99,7 @@ app.get('/encounters', function(req, res, next){
     
         for (row in rows) {
             bear = {};
+            bear.bearID      = rows[row].bearID;
             bear.bearName      = rows[row].bearName;
             encounter_page_data.bears.push(bear);
         }
@@ -200,6 +201,53 @@ app.post('/addencounter', function(req,res,next){
 
     res.redirect(302, 'back');
 });
+
+
+// Add Bear to Encounter POST route
+app.post('/addBearToEncounter', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var addBearToEncounter = "INSERT INTO Encounters_Bears (bearID, encounterID) VALUES (?, ?)";
+    var {bearID, encounterID} = req.body
+
+    db.pool.query(addBearToEncounter, [bearID, encounterID], function(err, result){
+        
+        if(err){
+            next(err);
+            return;
+        }
+        });
+
+        res.redirect(302, 'back');
+
+});
+
+
+// Add Bear to Encounter POST route
+app.post('/removeBearFromEncounter', function(req,res,next){
+    
+    console.log(req.body)
+    
+    var removeBearFromEncounter = "DELETE FROM Encounters_Bears WHERE bearID = ? AND encounterID = ?";
+    var {bearID, encounterID} = req.body
+
+    db.pool.query(removeBearFromEncounter, [bearID, encounterID], function(err, result){
+        
+        if(err){
+            next(err);
+            return;
+        }
+        });
+
+        res.redirect(302, 'back');
+
+});
+
+
+
+
+
 
 
 // ====================================================================================
@@ -523,6 +571,48 @@ app.post('/addpark', function(req,res,next){
     res.redirect(302, 'back');
 
 });
+
+// Remove Park From Encounter route
+app.post('/removeParkFromEncounter', function(req,res,next){
+    
+    console.log(req.body)
+
+    var encounterID = req.body.encounterID
+    var removeParkFromEncounter = "UPDATE Encounters SET parkID = NULL WHERE encounterID = " + encounterID;
+
+    db.pool.query(removeParkFromEncounter, function(err, result){
+        
+    if(err){
+        next(err);
+        return;
+    }
+    });
+
+    res.redirect(302, 'back');
+
+});
+
+// Remove Park From Encounter route
+app.post('/addParkToEncounter', function(req,res,next){
+    
+    console.log(req.body)
+
+    var updateEncounterID = req.body.updateEncounterID
+    var updateParkID = req.body.updateParkID
+    var updateParkEncounter = "UPDATE Encounters SET parkID = " + updateParkID + " WHERE encounterID = " + updateEncounterID;
+
+    db.pool.query(updateParkEncounter, function(err, result){
+        
+    if(err){
+        next(err);
+        return;
+    }
+    });
+
+    res.redirect(302, 'back');
+
+});
+
 
 
 

@@ -15,9 +15,9 @@
     <fieldset>
         <legend>Create Park</legend>
         <label for="pname">Park name (required):</label>
-        <input type="text" id="pname" name="pname">
+        <input type="text" id="pname" name="pname" required>
         <label for="state">State (required, 2-letter Postal Code):</label>
-        <input type="text" id="sname" name="sname" maxlength="2" minlength="2">
+        <input type="text" id="sname" name="sname" maxlength="2" minlength="2" required>
         <label for="annualVisitorCount">Annual Visitor Count:</label>
         <input type="number" id="annualVisitorCount" name="annualVisitorCount" minlength="0"><br>
         <input type="submit" value="Create Park" id="createParkButton">
@@ -26,11 +26,11 @@
 </div>
 
 <div>
-<form>
+<form id="removeParkFromEncounter" action="/removeParkFromEncounter" method="post">
     <fieldset>
         <legend>Remove Park from Encounter</legend>
         <label for="encounterID">Encounter ID:</label>
-        <select id="encounterID" name="encounters">
+        <select id="encounterID" name="encounterID">
             <option value="">Choose an encounter</option>
             {{#each data.encounters}}
             <option value={{this.encounterID}}>{{this.encounterID}}</option>
@@ -42,18 +42,18 @@
 </div>
 
 <div>
-<form>
+<form  id="addParkToEncounter" action="/addParkToEncounter" method="post">
     <fieldset>
         <legend>Add Park to Encounter</legend>
-        <label for="parkID">Park name:</label>
-        <select id="parkname" name="parks">
+        <label for="updateParkID">Park name:</label>
+        <select id="updateParkID" name="updateParkID">
             <option value="">Choose a Park</option>
-            {{#each data.parknames}}
+            {{#each data.parks}}
             <option value={{this.parkID}}>{{this.parkName}}</option>
             {{/each}}
         </select>
         <label for="encounterID">Encounter ID:</label>
-        <select id="updateEncounterID" name="encounters">
+        <select id="updateEncounterID" name="updateEncounterID">
             <option value="">Choose an Encounter</option>
             {{#each data.encounters}}
             <option value={{this.encounterID}}>{{this.encounterID}}</option>
