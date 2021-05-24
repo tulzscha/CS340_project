@@ -49,87 +49,125 @@ app.get('/encounters', function(req, res, next){
     var encounter_page_data = {};
 
     // 
-    db.pool.query(selectEncounters2, function(err, rows){
+    function findParks(selectParks){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectParks, function(err, rows){
 
-        if(err){
-            next(err);
-            return;
-        }
-        encounter_page_data.encounters = [];
-        for (row in rows) {
-            encounter = {};
+                if(err){
+                    next(err);
+                    return;
+                }
+            
+                encounter_page_data.parks = [];
+            
+                for (row in rows) {
+                    park = {};
+                    park.parkName      = rows[row].parkName;
+                    encounter_page_data.parks.push(park);
+                }
+            resolve(console.log("parks found."));
+            });
+        });
+    }
+    function findBears(selectBears){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectBears, function(err, rows){
 
-            encounter.enID      = rows[row].enID;
-            encounter.Park    = rows[row].Park;
-            encounter.Date    = rows[row].Date;
-            encounter.BasketsStolen  = rows[row].BasketsStolen;
-            encounter.PhotosTaken = rows[row].PhotosTaken;
-            encounter.Description = rows[row].Description;
-            encounter.Bears = rows[row].Bears;
-            encounter.Humans = rows[row].Humans;
+                if(err){
+                    next(err);
+                    return;
+                }
+            
+                encounter_page_data.bears = [];
+            
+                for (row in rows) {
+                    bear = {};
+                    bear.bearID      = rows[row].bearID;
+                    bear.bearName      = rows[row].bearName;
+                    encounter_page_data.bears.push(bear);
+                }
+            resolve(console.log("bears found."));
+            });
+        });
+    }
+    function selectAllEncounters(selectEncounters){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectEncounters, function(err, rows){
 
-            encounter_page_data.encounters.push(encounter);
+                if(err){
+                    next(err);
+                    return;
+                }
+            
+                encounter_page_data.allencounters = [];
+            
+                for (row in rows) {
+                    allencounter = {};
+                    allencounter.encounterID      = rows[row].encounterID;
+                    encounter_page_data.allencounters.push(allencounter);
+                }
+            resolve(console.log("encounters found."));
+            });
+        });
+    }
+    function selectValidEncounters(selectEncounters2){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectEncounters2, function(err, rows){
 
-        }
-    db.pool.query(selectParks, function(err, rows){
+                if(err){
+                    next(err);
+                    return;
+                }
+                encounter_page_data.encounters = [];
+                for (row in rows) {
+                    encounter = {};
+        
+                    encounter.enID      = rows[row].enID;
+                    encounter.Park    = rows[row].Park;
+                    encounter.Date    = rows[row].Date;
+                    encounter.BasketsStolen  = rows[row].BasketsStolen;
+                    encounter.PhotosTaken = rows[row].PhotosTaken;
+                    encounter.Description = rows[row].Description;
+                    encounter.Bears = rows[row].Bears;
+                    encounter.Humans = rows[row].Humans;
+        
+                    encounter_page_data.encounters.push(encounter);
+        
+                }
+                resolve(console.log("valid encounters found"));
+            });
+        });
+    }
 
-        if(err){
-            next(err);
-            return;
-        }
-    
-        encounter_page_data.parks = [];
-    
-        for (row in rows) {
-            park = {};
-            park.parkName      = rows[row].parkName;
-            encounter_page_data.parks.push(park);
-        }
-    
-    });
+    function finallyrender(){
+        return new Promise(function(resolve, reject){
+            //
+            encounter_context.data = encounter_page_data;
 
-    db.pool.query(selectBears, function(err, rows){
+            //render unto keysar
+            res.render('encounters', encounter_context);
+            resolve(console.log("encounters page rendered."));
+            return true;
+        });
+    }
 
-        if(err){
-            next(err);
-            return;
-        }
-    
-        encounter_page_data.bears = [];
-    
-        for (row in rows) {
-            bear = {};
-            bear.bearID      = rows[row].bearID;
-            bear.bearName      = rows[row].bearName;
-            encounter_page_data.bears.push(bear);
-        }
-    
-    });
-
-    db.pool.query(selectEncounters, function(err, rows){
-
-        if(err){
-            next(err);
-            return;
-        }
-    
-        encounter_page_data.allencounters = [];
-    
-        for (row in rows) {
-            allencounter = {};
-            allencounter.encounterID      = rows[row].encounterID;
-            encounter_page_data.allencounters.push(allencounter);
-        }
-    
-    });
-
-    // Load data into the context
-    encounter_context.data = encounter_page_data;
-
-    //render unto keysar
-    res.render('encounters', encounter_context);
-    });
-
+    // wrap functions
+    function allencounters(){
+        return selectAllEncounters(selectEncounters);
+    }
+    function validencounters(){
+        return selectValidEncounters(selectEncounters2);
+    }
+    function bears(){
+        return findBears(selectBears);
+    }
+    function parks(){
+        return findParks(selectParks);
+    }
+    function render(){
+        return finallyrender();
+    }
+    allencounters().then(validencounters).then(bears).then(parks).then(render);
 });
 
     
@@ -262,33 +300,54 @@ app.get('/bears', function(req, res){
     var bear_page_data = {};
 
     // Query to get the current humans
-    db.pool.query(selectBears, function(err, rows){
+    // create promise
+    function findbears(selectBears){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectBears, function(err, rows){
 
-        if(err){
-            next(err);
-            return;
-        }
+                if(err){
+                    next(err);
+                    return;
+                }
+        
+                // populate page_data with Bears, where each bear is the data from the "rows" result of the query
+                bear_page_data.bears = [];
+                for (row in rows) {
+                    bear = {};
+        
+                    bear.bearID = rows[row].bearID;
+                    bear.bearName = rows[row].bearName;
+                    bear.species = rows[row].species;
+                    bear.identifyingTattoos = rows[row].identifyingTattoos;
+        
+                    bear_page_data.bears.push(bear);
+                }
+                resolve(console.log("bears found"));
 
-        // populate page_data with Bears, where each bear is the data from the "rows" result of the query
-        bear_page_data.bears = [];
-        for (row in rows) {
-            bear = {};
+        
+            });
+        })
+    }
 
-            bear.bearID = rows[row].bearID;
-            bear.bearName = rows[row].bearName;
-            bear.species = rows[row].species;
-            bear.identifyingTattoos = rows[row].identifyingTattoos;
+    function finallyrender(){
+        return new Promise(function(resolve, reject){
+                            // Load data into the context
+            bear_context.data = bear_page_data;
+        
+                            //render unto THE BEAR
+            res.render('bears', bear_context);
+            resolve(console.log("bears rendered"));
+        })
+    }
 
-            bear_page_data.bears.push(bear);
-        }
-
-        // Load data into the context
-        bear_context.data = bear_page_data;
-
-        //render unto THE BEAR
-        res.render('bears', bear_context);
-
-    });
+    function bears(){
+        return findbears(selectBears);
+    }
+    function render(){
+        return finallyrender();
+    }
+    bears().then(render);
+    // render
 });
 
 // Add Bear POST route
@@ -308,7 +367,6 @@ app.post('/addbear', function(req,res,next){
         });
 
         res.redirect(302, 'back');
-
 });
 
 
@@ -363,17 +421,69 @@ app.post('/updatebear', function(req,res,next){
     var bearID = req.body.bearID;
     var species = req.body.species;
     var tattoos = req.body.identifyingTattoos;
+    var the_bear = {};
+    var findBear = "SELECT species, identifyingTattoos FROM Bears WHERE bearID = " + bearID;
+    //var updateBear = "UPDATE Bears SET species = '" + species + "', identifyingTattoos = '" + tattoos + "' WHERE bearID = " + bearID;
+    
 
-    var updateBear = "UPDATE Bears SET species = '" + species + "', identifyingTattoos = '" + tattoos + "' WHERE bearID = " + bearID;
+    console.log(findBear);
 
-    console.log(updateBear);
+    function findthebear(findBear, the_bear){
+        return new Promise(function(resolve, reject){
+            db.pool.query(findBear, function(err, result){
+        
+                if(err){
+                    next(err);
+                    return;
+                }
+                the_bear.info = [];
+                bear = {}
+                bear.species = result[0].species;
+                bear.identifyingTattoos = result[0].identifyingTattoos;
+                the_bear.info.push(bear);
+                console.log("the result is:", result);
+                //console.log("this is result.identifying tattoos:", result[0].identifyingTattoos);
+                // populate page_data with Bears, where each bear is the data from the "rows" result of the query
+                the_bear.info['species'] = result[0].species;
+                the_bear.info['identifyingTattoos'] = result[0].identifyingTattoos;
+                console.log("the_bear.info = ", the_bear.info[0]);
+                //console.log("the bear.info[0] ", the_bear.info[0]);
+                var updateBear = "UPDATE Bears SET species = '" + [species || the_bear.info[0].species] + "', identifyingTattoos = '" + [tattoos || the_bear.info[0].identifyingTattoos] + "' WHERE bearID = " + bearID;
+                db.pool.query(updateBear, function(err, result){
+                    if(err){
+                        next(err);
+                        return;
+                    }
+                });
+        
+            });
+            resolve();
+        });
+    }
+    
+    function updatethebear(updateBear){
+        return new Promise(function(resolve, reject){
+            db.pool.query(updateBear, function(err, result){
+                if(err){
+                    next(err);
+                    return;
+                }
+            });
+            resolve();
+        });
+    }
 
-    db.pool.query(updateBear, function(err, result){
-        if(err){
-            next(err);
-            return;
-        }
-    });
+    function findbearz(){
+        return findthebear(findBear, the_bear);
+    }
+    function updatebearz(){
+        return updatethebear(updateBear);
+    }
+    //findbearz().then(updatebearz);
+    findbearz();
+    console.log(the_bear.species);
+    console.log(the_bear.identifyingTattoos);
+
 
     res.redirect(302, 'back');
 
@@ -391,58 +501,89 @@ app.post('/updatebear', function(req,res,next){
 app.get('/humans', function(req, res){
 
     var selectHumans = "SELECT encounterID, firstName, lastName, date_format(birthday,'%Y-%m-%d') AS birthday FROM Humans";
-    var encounterIDs = "SELECT encounterID FROM Encounters"
+    var encounterIDs = "SELECT encounterID FROM Encounters GROUP BY encounterID"
     var human_context = {};
     var human_page_data = {};
 
-    // Query to get the current humans
-    db.pool.query(selectHumans, function(err, rows){
+    // Query to get current humans. 
+    // Add promises for both queries.
 
-        if(err){
-            next(err);
-            return;
-        }
+    function showHumans(selectHumans){
+        return new Promise(function(resolve, reject){
+            db.pool.query(selectHumans, function(err, rows){
 
-        // populate page_data with Humans, where each human is the data from the "rows" result of the query
-        human_page_data.humans = [];
-        for (row in rows) {
-            human = {};
-
-            human.encounterID      = rows[row].encounterID;
-            human.firstName    = rows[row].firstName;
-            human.lastName    = rows[row].lastName;
-            human.birthday  = rows[row].birthday;
-
-            human_page_data.humans.push(human);
-        }
-
+                if(err){
+                    next(err);
+                    return;
+                }
+        
+                // populate page_data with Humans, where each human is the data from the "rows" result of the query
+                human_page_data.humans = [];
+                for (row in rows) {
+                    human = {};
+        
+                    human.encounterID      = rows[row].encounterID;
+                    human.firstName    = rows[row].firstName;
+                    human.lastName    = rows[row].lastName;
+                    human.birthday  = rows[row].birthday;
+        
+                    human_page_data.humans.push(human);
+                }
+                resolve(console.log("Humans found"));
+                });
+            
         });
+    }
 
-    // Query to get the available encoutnerIDs
-    db.pool.query(encounterIDs, function(err, rows){
+    function encounterDropDowns(encounterIDs){
+        return new Promise(function(resolve, reject){
+            db.pool.query(encounterIDs, function(err, rows){
 
-        if(err){
-            next(err);
-            return;
-        }
-
-        // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
-        human_page_data.encounters = [];
-
-        for (row in rows) {
-            encounter = {};
-            encounter.encounterID      = rows[row].encounterID;
-            human_page_data.encounters.push(encounter);
-        }
-
+                if(err){
+                    next(err);
+                    return;
+                }
+        
+                // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
+                human_page_data.encounters = [];
+        
+                for (row in rows) {
+                    encounter = {};
+                    encounter.encounterID      = rows[row].encounterID;
+                    human_page_data.encounters.push(encounter);
+                }
+                resolve(console.log("encounter id's found."));
+        
+                });
+            
         });
+    }
 
-    // Load data into the context
-    human_context.data = human_page_data;
+    function finallyrender(){
+        return new Promise(function(resolve, reject){
+            human_context.data = human_page_data;
 
-    //render unto keysar
-    res.render('humans', human_context);
+            //render unto keysar
+            res.render('humans', human_context);
+            resolve(console.log("ready to render"));
+        });
+    }
 
+
+    // Wrap functions
+
+    function findhumans(){
+        return showHumans(selectHumans);
+    }
+
+    function findIds(){
+        return encounterDropDowns(encounterIDs);
+    }
+
+    function render(){
+        return finallyrender();
+    }
+    findhumans().then(findIds).then(render);
 });
 
 // Humans POST route, for adding a human
@@ -474,81 +615,108 @@ app.post('/addhumans', function(req,res,next){
 app.get('/parks', function(req, res){
 
     var selectParks = "SELECT ParkID, parkName, state, annualVisitorCount FROM Parks";
-    var encounterIDs = "SELECT encounterID FROM Encounters";
+    var encounterIDs = "SELECT encounterID FROM Encounters GROUP BY encounterID";
     var parkNames = "SELECT parkName FROM Parks";
     var park_context = {};
     var park_page_data = {};
 
-    // Query to get the current humans
-    db.pool.query(selectParks, function(err, rows){
+    // make promises
+    function findparks(selectParks){
+        return new Promise(function(resolve, reject){
+            //
+            db.pool.query(selectParks, function(err, rows){
 
-        if(err){
-            next(err);
-            return;
-        }
-
-        // populate page_data with Humans, where each human is the data from the "rows" result of the query
-        park_page_data.parks = [];
-
-        for (row in rows) {
-            park = {};
-
-            park.parkID      = rows[row].ParkID;
-            park.parkName    = rows[row].parkName;
-            park.state    = rows[row].state;
-            park.annualVisitorCount  = rows[row].annualVisitorCount;
-
-            park_page_data.parks.push(park);
-        }
-
-    });
-
-    // Query to get the available encoutnerIDs
-    db.pool.query(encounterIDs, function(err, rows){
-
-        if(err){
-            next(err);
-            return;
-        }
+                if(err){
+                    next(err);
+                    return;
+                }
         
-        // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
-        park_page_data.encounters = [];
-        for (row in rows) {
-            encounter = {};
-            encounter.encounterID      = rows[row].encounterID;
-            park_page_data.encounters.push(encounter);
-        }
-
-    });
-
-    // Query to get the available park names
-    db.pool.query(parkNames, function(err, rows){
-
-        if(err){
-            next(err);
-            return;
-        }
+                // populate page_data with Humans, where each human is the data from the "rows" result of the query
+                park_page_data.parks = [];
         
-        // populate data with parknames
-        park_page_data.parknames = [];
+                for (row in rows) {
+                    park = {};
+        
+                    park.parkID      = rows[row].ParkID;
+                    park.parkName    = rows[row].parkName;
+                    park.state    = rows[row].state;
+                    park.annualVisitorCount  = rows[row].annualVisitorCount;
+        
+                    park_page_data.parks.push(park);
+                }
+                resolve(console.log("parks found"));
+            });
+        });
+    }
 
-        for (row in rows) {
-            parkname = {};
-            parkname.parkID      = rows[row].parkID;
-            parkname.parkName      = rows[row].parkName;
-            park_page_data.parknames.push(parkname);
-        }
+    function findIds(encounterIDs){
+        return new Promise(function(resolve, reject){
+            //
+            db.pool.query(encounterIDs, function(err, rows){
 
-    });
+                if(err){
+                    next(err);
+                    return;
+                }
+                
+                // populate data with EncounterIDs, where each ID is the data from the "rows" result of the query
+                park_page_data.encounters = [];
+                for (row in rows) {
+                    encounter = {};
+                    encounter.encounterID      = rows[row].encounterID;
+                    park_page_data.encounters.push(encounter);
+                }
+                resolve(console.log("ids have been found"));
+            });
+        });
+    }
 
-    // add data to context, render
-    park_context.data = park_page_data;
-    res.render('parks', park_context);
+    function findparknames(parkNames){
+        return new Promise(function(resolve, reject){
+            //
+            db.pool.query(parkNames, function(err, rows){
 
-    // setTimeout((() => {
-    //     park_context.data = park_page_data;
-    //     res.render('parks', park_context);
-    //  }), 1000);
+                if(err){
+                    next(err);
+                    return;
+                }
+                
+                // populate data with parknames
+                park_page_data.parknames = [];
+        
+                for (row in rows) {
+                    parkname = {};
+                    parkname.parkID      = rows[row].parkID;
+                    parkname.parkName      = rows[row].parkName;
+                    park_page_data.parknames.push(parkname);
+                }
+                console.log("park names have been found");
+            });
+        });
+    }
+
+    function finallyrender(){
+        return new Promise(function(resolve, reject){
+            park_context.data = park_page_data;
+            res.render('parks', park_context);
+            resolve(console.log("rendered."));
+            return true;
+        });
+    }
+
+    function parks(){
+        return findparks(selectParks);
+    }
+    function parknames(){
+        return findparknames(parkNames);
+    }
+    function ids(){
+        return findIds(encounterIDs);
+    }
+    function render(){
+        return finallyrender();
+    }
+    parks().then(ids).then(render);
 
 });
 
@@ -637,5 +805,5 @@ app.use(function(err, req, res, next){
     LISTENER
 */
 app.listen(PORT, function(){            // This is the basic syntax for what is called the 'listener' which receives incoming requests on the specified PORT.
-    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.')
+    console.log('Express started on http://localhost:' + PORT + '; press Ctrl-C to terminate.');
 });
