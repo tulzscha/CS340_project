@@ -62,6 +62,7 @@ app.get('/encounters', function(req, res, next){
             
                 for (row in rows) {
                     park = {};
+                    park.parkID      = rows[row].parkID;
                     park.parkName      = rows[row].parkName;
                     encounter_page_data.parks.push(park);
                 }
@@ -175,12 +176,13 @@ app.get('/encounters', function(req, res, next){
 app.post('/addencounter', function(req,res,next){
     
     console.log("This is the body," + req.body)
-    var findParkId = "SELECT parkID FROM Parks WHERE parkName = '" + req.body.parkID + "'";
+    findParkId = "SELECT parkID FROM Parks WHERE parkName = '" + req.body.parkID + "'";
     var createEncounter = "INSERT INTO Encounters (`parkID`, `encounterDate`, `basketsStolen`, `photosTaken`, `description` ) VALUES (?, ?, ?, ?, ?)";
     var encounterdate = req.body.encounterdate;
     var baskets = req.body.baskets;
     var photos = req.body.photos;
     var description = req.body.description;
+    var parkid = req.body.parkID;
     var park = {};
 
     function printvars(var1, var2, var3, var4, var5){
@@ -230,7 +232,7 @@ app.post('/addencounter', function(req,res,next){
     }
 
     function docreate(){
-        createquery(createEncounter, park.data[0], encounterdate, baskets, photos, description);
+        createquery(createEncounter, parkid, encounterdate, baskets, photos, description);
     }
 
     // first, find id that matches park name, then make sure those values are correct by printing to console, 
