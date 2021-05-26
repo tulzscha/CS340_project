@@ -41,7 +41,7 @@ app.get('/index', function(req, res){
 
 app.get('/encounters', function(req, res, next){
 
-    var selectEncounters2 = "SELECT en.encounterID AS enID, (SELECT parkName FROM Parks WHERE parkID = en.parkID) AS Park, date_format(en.encounterDate, '%Y-%m-%d') AS Date, en.basketsStolen AS BasketsStolen, en.photosTaken AS PhotosTaken, en.description AS Description, GROUP_CONCAT(DISTINCT be.bearName SEPARATOR ', ') AS Bears, GROUP_CONCAT(DISTINCT CONCAT(COALESCE(NULLIF(hu.firstName,''), 'UNKNOWN'), ' ', COALESCE(NULLIF(hu.lastName,''), 'HUMAN(S)')) SEPARATOR ', ') AS Humans FROM Encounters en JOIN Encounters_Bears enbe ON en.encounterID = enbe.encounterID JOIN Bears be ON enbe.bearID = be.bearID JOIN Humans hu ON hu.encounterID = en.encounterID GROUP BY enID";
+    var selectEncounters2 = "SELECT en.encounterID AS enID, (SELECT parkName FROM Parks WHERE parkID = en.parkID) AS Park, date_format(en.encounterDate, '%Y-%m-%d') AS Date, en.basketsStolen AS BasketsStolen, en.photosTaken AS PhotosTaken, en.description AS Description, GROUP_CONCAT(DISTINCT IFNULL(be.bearName, 'INCOMPLETE -- Add Bear(s)!') SEPARATOR ', ') AS Bears, GROUP_CONCAT(DISTINCT CONCAT(COALESCE(NULLIF(IFNULL(hu.firstName, 'INCOMPLETE -- '),''), 'Unknown'), ' ', COALESCE(NULLIF(IFNULL(hu.lastName, 'add Human(s)!'),''), 'Human(s)')) SEPARATOR ', ') AS Humans FROM Encounters en LEFT JOIN Encounters_Bears enbe ON en.encounterID = enbe.encounterID LEFT JOIN Bears be ON enbe.bearID = be.bearID LEFT JOIN Humans hu ON hu.encounterID = en.encounterID GROUP BY enID";
     var selectParks = "SELECT * FROM Parks";
     var selectBears = "SELECT * FROM Bears";
     var selectEncounters = "SELECT * FROM Encounters";
