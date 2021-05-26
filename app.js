@@ -173,73 +173,101 @@ app.get('/encounters', function(req, res, next){
 
     
 // Add encounters POST route to create new encounter
-app.post('/addencounter', function(req,res,next){
+// app.post('/addencounter', function(req,res,next){
     
-    console.log("This is the body," + req.body)
-    findParkId = "SELECT parkID FROM Parks WHERE parkName = '" + req.body.parkID + "'";
-    var createEncounter = "INSERT INTO Encounters (`parkID`, `encounterDate`, `basketsStolen`, `photosTaken`, `description` ) VALUES (?, ?, ?, ?, ?)";
+//     console.log("This is the body," + req.body)
+//     findParkId = "SELECT parkID FROM Parks WHERE parkName = '" + req.body.parkID + "'";
+//     var createEncounter = "INSERT INTO Encounters (`parkID`, `encounterDate`, `basketsStolen`, `photosTaken`, `description` ) VALUES (?, ?, ?, ?, ?)";
+//     var encounterdate = req.body.encounterdate;
+//     var baskets = req.body.baskets;
+//     var photos = req.body.photos;
+//     var description = req.body.description;
+//     var parkid = req.body.parkID;
+//     if(findParkId == 'undefined'){
+//         parkid = 'NULL'
+//     };
+//     var park = {};
+
+//     function printvars(var1, var2, var3, var4, var5){
+//         return new Promise(function(resolve, reject){
+//             resolve(console.log("This is the id found in query outside query call, " + var5));
+//             resolve(console.log("These are all the variables, " + var1, var2, var3, var4, var5));
+//         });
+//     }
+
+//     function createquery(createEncounter, var1, var2, var3, var4, var5){
+//         return new Promise(function(resolve, reject) {
+//             db.pool.query(createEncounter, [var1, var2, var3, var4, var5], function(err, result){
+//                 if(err){
+//                     next(err);
+//                 }   
+//                 resolve(console.log("ok"));
+//             });
+//         });
+//     }
+
+//     function waitquery(findParkId){
+//         return new Promise(function(resolve, reject) {
+//             db.pool.query(findParkId, function(err, rows){
+//                 park.data = [];
+        
+//                 if(err){
+//                     next(err);
+//                 }
+//                 for (row in rows) {
+//                     park.data.push(rows[row].parkID);
+//                 }
+//                 resolve(console.log("This is the id found in query, " + park.data));
+        
+        
+//             });
+//         })
+//     }
+
+//     // finds the park id associated with given park name
+//     function doquery(){
+//         return waitquery(findParkId);
+//     }
+
+//     // prints variables so we can check that they are correct (for testing purposes)
+//     function doprintvars(){
+//         return printvars(encounterdate, baskets, photos, description, park.data[0]);
+//     }
+
+//     function docreate(){
+//         createquery(createEncounter, parkid, encounterdate, baskets, photos, description);
+//     }
+
+//     // first, find id that matches park name, then make sure those values are correct by printing to console, 
+//     // finally, create the encounter. woo!
+//     doquery().then(doprintvars).then(docreate);
+
+//     res.redirect(302, 'back');
+// });
+
+app.post('/addencounter', function(req,res,next){
+
+    console.log(req.body)
+    
+    var createEncounter = "INSERT INTO Encounters (`parkID`, `encounterDate`, `basketsStolen`, `photosTaken`, `description`) VALUES (?, ?, ?, ?, ?)";
+    //var {parkID, encounterdate, baskets, photos, description} = req.body;
     var encounterdate = req.body.encounterdate;
     var baskets = req.body.baskets;
     var photos = req.body.photos;
     var description = req.body.description;
-    var parkid = req.body.parkID;
-    var park = {};
+    var parkID = req.body.parkID;
 
-    function printvars(var1, var2, var3, var4, var5){
-        return new Promise(function(resolve, reject){
-            resolve(console.log("This is the id found in query outside query call, " + var5));
-            resolve(console.log("These are all the variables, " + var1, var2, var3, var4, var5));
+    console.log(parkID, encounterdate, baskets, photos, description);
+
+    db.pool.query(createEncounter, [parkID, encounterdate, baskets, photos, description], function(err, result){
+        
+        if(err){
+            next(err);
+            return;
+        }
         });
-    }
 
-    function createquery(createEncounter, var1, var2, var3, var4, var5){
-        return new Promise(function(resolve, reject) {
-            db.pool.query(createEncounter, [var1, var2, var3, var4, var5], function(err, result){
-                if(err){
-                    next(err);
-                }   
-                resolve(console.log("ok"));
-            });
-        });
-    }
-
-    function waitquery(findParkId){
-        return new Promise(function(resolve, reject) {
-            db.pool.query(findParkId, function(err, rows){
-                park.data = [];
-        
-                if(err){
-                    next(err);
-                }
-                for (row in rows) {
-                    park.data.push(rows[row].parkID);
-                }
-                resolve(console.log("This is the id found in query, " + park.data));
-        
-        
-            });
-        })
-    }
-
-    // finds the park id associated with given park name
-    function doquery(){
-        return waitquery(findParkId);
-    }
-
-    // prints variables so we can check that they are correct (for testing purposes)
-    function doprintvars(){
-        return printvars(encounterdate, baskets, photos, description, park.data[0]);
-    }
-
-    function docreate(){
-        createquery(createEncounter, parkid, encounterdate, baskets, photos, description);
-    }
-
-    // first, find id that matches park name, then make sure those values are correct by printing to console, 
-    // finally, create the encounter. woo!
-    doquery().then(doprintvars).then(docreate);
-
-    res.redirect(302, 'back');
+        res.redirect(302, 'back');
 });
 
 
