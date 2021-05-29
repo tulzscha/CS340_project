@@ -47,20 +47,23 @@
 <form id="addBearToEncounter" action="/addBearToEncounter" method="post">
     <fieldset>
         <legend>Add Bear to Encounter</legend>
-        <label for="bearID">Bear name:</label>
+
+        <label for="encounterID">Encounter:</label>
+        <select id="encounterID" name="encounterID" required>
+            <option value="">Choose an encounter</option>
+            {{#each data.encounters}}
+            <option value={{this.enID}}>{{this.enID}} -- {{this.Bears}}</option>
+            {{/each}}
+        </select>
+
+        <label for="bearID">Bear to add:</label>
         <select id="bearID" name="bearID" required>
             <option value="">Choose a bear</option>
             {{#each data.bears}}
             <option value={{this.bearID}}>{{this.bearName}}</option>
             {{/each}}
         </select>
-        <label for="encounterID">encounterID:</label>
-        <select id="encounterID" name="encounterID" required>
-            <option value="">Choose an encounter</option>
-            {{#each data.allencounters}}
-            <option value={{this.encounterID}}>{{this.encounterID}}</option>
-            {{/each}}
-        </select>
+
         <br>
         <input type="submit" value="Add Bear to Encounter" id="submitbutton">
     </fieldset>
@@ -73,20 +76,23 @@
 <form id="removeBearFromEncounter" action="/removeBearFromEncounter" method="post">
     <fieldset>
         <legend>Remove Bear from Encounter</legend>
-        <label for="bearID">Bear name:</label>
+
+        <label for="encounterID">Encounter:</label>
+        <select id="encounterID" name="encounterID" required>
+            <option value="">Choose an encounter</option>
+            {{#each data.encounters}}
+            <option value={{this.enID}}>{{this.enID}} -- {{this.Bears}}</option>
+            {{/each}}
+        </select>
+
+        <label for="bearID">Bear to remove:</label>
         <select id="bearID" name="bearID" required>
             <option value="">Choose a bear</option>
             {{#each data.bears}}
             <option value={{this.bearID}}>{{this.bearName}}</option>
             {{/each}}
         </select>
-        <label for="encounterID">encounterID:</label>
-        <select id="encounterID" name="encounterID" required>
-            <option value="">Choose an encounter</option>
-            {{#each data.allencounters}}
-            <option value={{this.encounterID}}>{{this.encounterID}}</option>
-            {{/each}}
-        </select>
+
         <br>
         <input type="submit" value="Remove Bear from Encounter" id="submitbutton">
     </fieldset>
